@@ -1,101 +1,117 @@
-import { Section } from '@/components/ui/Section'
+'use client'
+
+import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 export function CaseStudySection() {
   return (
-    <Section background="white" paddingY="lg">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-gammart-green-dark mb-6">
-          Une transformation qui parle d'elle-même
-        </h2>
-        <p className="text-xl text-gray-700 mb-10">
-          Voici un exemple concret d'une <strong>isolation thermique Bas-Rhin</strong> (et Alsace) pensée comme
-          une rénovation globale, pour un résultat mesurable.
-        </p>
+    <section className="py-20 md:py-28 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gammart-green-dark mb-6">
+              Une transformation qui parle d'elle-même
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              Exemple concret d'une rénovation globale pour un résultat mesurable.
+            </p>
+          </div>
+        </ScrollReveal>
 
-        <div className="bg-gammart-beige rounded-2xl p-8 md:p-12">
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-8">
-            <div>
-              <h3 className="text-2xl font-bold text-gammart-green-dark mb-4">
-                Réalisation vedette : Baerenthal (57230)
-              </h3>
-              <p className="text-lg text-gray-700 mb-2">Rénovation d'ampleur</p>
-            </div>
-            <div className="flex justify-center">
-              <div className="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform">
-                <div className="text-center">
-                  <div className="inline-block bg-red-500 text-white px-6 py-3 rounded-full text-xl font-bold mb-3">
-                    Classe E
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left - Images */}
+          <ScrollReveal direction="left">
+            <div className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div className="rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/images/photos/renovation-2.jpeg"
+                      alt="Rénovation avant"
+                      width={300}
+                      height={200}
+                      className="w-full h-48 object-cover"
+                    />
                   </div>
-                  <div className="text-gray-600 mb-3 text-2xl">→</div>
-                  <div className="inline-block bg-green-500 text-white px-6 py-3 rounded-full text-xl font-bold mb-3">
-                    Classe B
+                  <div className="rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/images/photos/renovation-3.jpeg"
+                      alt="Travaux en cours"
+                      width={300}
+                      height={200}
+                      className="w-full h-48 object-cover"
+                    />
                   </div>
-                  <p className="text-3xl font-bold text-gammart-green-dark mt-4">-57%</p>
-                  <p className="text-gray-600 text-sm">de consommation</p>
+                </div>
+                <div className="pt-8">
+                  <div className="rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/images/photos/renovation-4.jpeg"
+                      alt="Rénovation après"
+                      width={300}
+                      height={400}
+                      className="w-full h-[416px] object-cover"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white rounded-xl p-6">
-              <h4 className="font-bold text-red-700 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                Avant
-              </h4>
-              <ul className="space-y-2 text-gray-700 text-sm">
-                <li>• Classe énergétique E</li>
-                <li>• Consommation importante</li>
-                <li>• Inconfort thermique</li>
-              </ul>
-            </div>
-
-            <div className="bg-white rounded-xl p-6">
-              <h4 className="font-bold text-green-700 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Après
-              </h4>
-              <ul className="space-y-2 text-gray-700 text-sm">
-                <li>• Classe B</li>
-                <li>• Maison plus agréable et économe</li>
-                <li>• Confort optimal toute l'année</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="bg-gammart-green-dark text-white rounded-xl p-6 mb-6">
-            <h4 className="font-bold text-xl mb-4 text-gammart-green-sage">Résultat</h4>
-            <p className="text-3xl font-bold mb-2">De 250 à 107 kWh/m²/an</p>
-            <p className="text-gammart-green-sage">Soit une réduction de 57% de la consommation énergétique</p>
-          </div>
-
+          {/* Right - Content */}
           <div>
-            <h4 className="font-bold text-gammart-green-dark mb-3">Travaux réalisés :</h4>
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 text-center">
-                <p className="text-sm font-semibold text-gammart-green-dark">ITE</p>
-              </div>
-              <div className="bg-white rounded-lg p-4 text-center">
-                <p className="text-sm font-semibold text-gammart-green-dark">Isolation combles perdus</p>
-              </div>
-              <div className="bg-white rounded-lg p-4 text-center">
-                <p className="text-sm font-semibold text-gammart-green-dark">Isolation plancher bas</p>
-              </div>
-            </div>
-          </div>
-        </div>
+            <ScrollReveal>
+              <div className="bg-gray-50 rounded-3xl p-8 md:p-10 mb-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-gammart-green-dark rounded-xl flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gammart-green-dark">Baerenthal (57230)</h3>
+                    <p className="text-gray-600">Rénovation d'ampleur</p>
+                  </div>
+                </div>
 
-        <div className="text-center mt-10">
-          <Button href="/realisations" variant="primary" size="lg">
-            Voir toutes nos réalisations
-          </Button>
+                {/* Before/After */}
+                <div className="flex items-center justify-center gap-6 mb-8">
+                  <div className="text-center">
+                    <div className="inline-block bg-red-500 text-white px-6 py-3 rounded-2xl text-xl font-bold">
+                      Classe E
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">250 kWh/m²/an</p>
+                  </div>
+                  <svg className="w-8 h-8 text-gammart-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                  <div className="text-center">
+                    <div className="inline-block bg-green-500 text-white px-6 py-3 rounded-2xl text-xl font-bold">
+                      Classe B
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">107 kWh/m²/an</p>
+                  </div>
+                </div>
+
+                {/* Works done */}
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <span className="bg-gammart-green-dark/10 text-gammart-green-dark px-4 py-2 rounded-full text-sm font-medium">ITE</span>
+                  <span className="bg-gammart-green-dark/10 text-gammart-green-dark px-4 py-2 rounded-full text-sm font-medium">Combles perdus</span>
+                  <span className="bg-gammart-green-dark/10 text-gammart-green-dark px-4 py-2 rounded-full text-sm font-medium">Plancher bas</span>
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={200}>
+              <Button href="/realisations" variant="primary" size="lg" className="w-full md:w-auto">
+                Voir toutes nos réalisations
+              </Button>
+            </ScrollReveal>
+          </div>
         </div>
       </div>
-    </Section>
+    </section>
   )
 }
