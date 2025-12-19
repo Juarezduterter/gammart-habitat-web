@@ -5,9 +5,16 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
 
+type NavItem = {
+  label: string
+  href?: string
+  subMenu?: { label: string; href: string }[]
+}
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [openMobileSubmenu, setOpenMobileSubmenu] = useState<string | null>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,10 +25,9 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navigation = [
+  const navigation: NavItem[] = [
     {
       label: 'Isolation du logement',
-      href: '/isolation',
       subMenu: [
         { label: 'ITE - Isolation par l\'Extérieur', href: '/isolation/ite' },
         { label: 'ITI - Isolation par l\'Intérieur', href: '/isolation/iti' },
@@ -31,7 +37,6 @@ export function Header() {
     },
     {
       label: 'Efficacité Énergétique',
-      href: '/efficacite-energetique',
       subMenu: [
         { label: 'Bardage & Ravalement', href: '/efficacite-energetique/bardage-ravalement' },
         { label: 'Menuiseries & Volets', href: '/efficacite-energetique/menuiseries' },
@@ -39,9 +44,14 @@ export function Header() {
         { label: 'Étude Thermique', href: '/efficacite-energetique/etude-thermique' },
       ],
     },
+    { label: 'Réalisations', href: '/realisations' },
     { label: 'Aides & Financements', href: '/aides-financements' },
     { label: 'À Propos', href: '/a-propos' },
   ]
+
+  const toggleMobileSubmenu = (label: string) => {
+    setOpenMobileSubmenu(openMobileSubmenu === label ? null : label)
+  }
 
   return (
     <header
@@ -52,23 +62,39 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-white font-bold text-xl">
-              <span className="text-white">gammart</span>{' '}
-              <span className="text-gammart-green-sage">habitat</span>
-            </div>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/logos/logo-horizontal.png"
+              alt="Gammart Habitat"
+              width={180}
+              height={50}
+              className="h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
             {navigation.map((item) => (
               <div key={item.label} className="relative group">
-                <Link
-                  href={item.href}
-                  className="text-white hover:text-gammart-green-sage transition-colors py-2 text-sm font-medium"
-                >
-                  {item.label}
-                </Link>
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="text-white hover:text-gammart-green-sage transition-colors py-2 text-sm font-medium"
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    className="text-white hover:text-gammart-green-sage transition-colors py-2 text-sm font-medium flex items-center gap-1 cursor-default"
+                  >
+                    {item.label}
+                    <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                )}
                 {item.subMenu && (
                   <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="bg-white rounded-lg shadow-xl py-2 min-w-[250px]">
@@ -119,14 +145,32 @@ export function Header() {
             <nav className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <div key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="block text-white hover:text-gammart-green-sage transition-colors py-2 text-sm font-medium"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.subMenu && (
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="block text-white hover:text-gammart-green-sage transition-colors py-2 text-sm font-medium"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      className="flex items-center justify-between w-full text-white hover:text-gammart-green-sage transition-colors py-2 text-sm font-medium"
+                      onClick={() => toggleMobileSubmenu(item.label)}
+                    >
+                      {item.label}
+                      <svg
+                        className={`w-4 h-4 transition-transform ${openMobileSubmenu === item.label ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  )}
+                  {item.subMenu && openMobileSubmenu === item.label && (
                     <div className="pl-4 space-y-2 mt-2">
                       {item.subMenu.map((subItem) => (
                         <Link
