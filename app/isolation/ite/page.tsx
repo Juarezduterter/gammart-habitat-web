@@ -108,7 +108,7 @@ const faqs = [
 const relatedServices = [
   {
     title: 'Isolation par l\'Intérieur (ITI)',
-    href: '/isolation/iti',
+    href: '/isolation-thermique-interieur-bas-rhin',
     icon: '/images/pictos/Isolation-Thermique-par-l-Intérieur.svg',
   },
   {
