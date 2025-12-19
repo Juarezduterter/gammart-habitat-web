@@ -80,21 +80,36 @@ export function AidesSection() {
             <p className="text-gammart-green-sage mb-8 max-w-2xl mx-auto text-lg">
               Nous vous aidons à identifier les aides pertinentes et vous accompagnons dans toutes vos démarches administratives.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 mb-8 opacity-60">
+            {/* Partner logos */}
+            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8 mb-8">
               <Image
                 src="/images/certifications/ma-prime-renov.svg"
                 alt="MaPrimeRénov'"
-                width={80}
-                height={40}
-                className="h-10 w-auto brightness-0 invert"
+                width={100}
+                height={50}
+                className="h-12 w-auto brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
               />
               <Image
                 src="/images/certifications/france-renov.svg"
                 alt="France Rénov'"
-                width={80}
-                height={40}
-                className="h-10 w-auto brightness-0 invert"
+                width={100}
+                height={50}
+                className="h-12 w-auto brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
               />
+              {/* CEE Logo */}
+              <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2 opacity-70 hover:opacity-100 transition-opacity">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span className="text-white font-bold text-lg">CEE</span>
+              </div>
+              {/* Éco-PTZ Logo */}
+              <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2 opacity-70 hover:opacity-100 transition-opacity">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-white font-bold text-lg">Éco-PTZ</span>
+              </div>
             </div>
             <Button href="/aides-financements" variant="secondary" size="lg">
               Découvrir toutes les aides
