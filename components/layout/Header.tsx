@@ -64,7 +64,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/images/logos/logo-horizontal.png"
+              src="/images/logos/logo-horizontal-colored-bg.png"
               alt="Gammart Habitat"
               width={180}
               height={50}
