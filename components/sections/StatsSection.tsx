@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 
 function AnimatedCounter({
   end,
@@ -60,8 +59,42 @@ function AnimatedCounter({
 }
 
 export function StatsSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const handleScroll = () => {
+      const rect = section.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+      const threshold = windowHeight * 0.3
+
+      // If section is partially visible and close to viewport
+      if (rect.top > -threshold && rect.top < threshold) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }
+
+    let scrollTimeout: NodeJS.Timeout
+    const debouncedScroll = () => {
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(handleScroll, 100)
+    }
+
+    window.addEventListener('scroll', debouncedScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', debouncedScroll)
+      clearTimeout(scrollTimeout)
+    }
+  }, [])
+
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-br from-gammart-green-dark via-gammart-green-leaf to-gammart-green-dark">
+    <section
+      ref={sectionRef}
+      className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-br from-gammart-green-dark via-gammart-green-leaf to-gammart-green-dark scroll-snap-section"
+    >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -156,24 +189,6 @@ export function StatsSection() {
               <div className="text-gammart-green-sage font-medium">m² isolés</div>
             </div>
           </div>
-        </div>
-
-        {/* Certifications */}
-        <div className="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-70">
-          <Image
-            src="/images/certifications/RGE.svg"
-            alt="RGE"
-            width={80}
-            height={80}
-            className="h-16 w-auto brightness-0 invert"
-          />
-          <Image
-            src="/images/certifications/Qualibat.svg"
-            alt="Qualibat"
-            width={80}
-            height={80}
-            className="h-16 w-auto brightness-0 invert"
-          />
         </div>
       </div>
     </section>

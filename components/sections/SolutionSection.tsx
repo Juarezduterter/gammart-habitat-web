@@ -75,7 +75,7 @@ export function SolutionSection() {
             </div>
 
             <ScrollReveal delay={500}>
-              <Button href="/a-propos" variant="primary" size="lg">
+              <Button href="/a-propos" variant="primary" size="lg" glow>
                 Découvrir notre approche
               </Button>
             </ScrollReveal>

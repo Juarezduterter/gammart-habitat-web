@@ -262,3 +262,62 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Partner logos marquee */
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Green glow breathing effect for CTA buttons */
+@keyframes glowBreathing {
+  0%, 100% {
+    box-shadow:
+      0 0 5px rgba(13, 77, 59, 0.4),
+      0 0 10px rgba(13, 77, 59, 0.3),
+      0 0 20px rgba(13, 77, 59, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 10px rgba(13, 77, 59, 0.6),
+      0 0 20px rgba(13, 77, 59, 0.4),
+      0 0 40px rgba(13, 77, 59, 0.3),
+      0 0 60px rgba(13, 77, 59, 0.2);
+  }
+}
+
+.btn-glow {
+  animation: glowBreathing 2s ease-in-out infinite;
+}
+
+.btn-glow:hover {
+  animation: none;
+  box-shadow:
+    0 0 15px rgba(13, 77, 59, 0.6),
+    0 0 30px rgba(13, 77, 59, 0.4),
+    0 0 45px rgba(13, 77, 59, 0.3);
+}
+
+/* Scroll snap for stats section */
+.scroll-snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}

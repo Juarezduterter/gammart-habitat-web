@@ -8,6 +8,7 @@ interface BaseButtonProps {
   variant?: ButtonVariant
   size?: ButtonSize
   fullWidth?: boolean
+  glow?: boolean
   children: React.ReactNode
 }
 
@@ -40,14 +41,16 @@ export function Button({
   variant = 'primary',
   size = 'md',
   fullWidth = false,
+  glow = false,
   children,
   className = '',
   ...props
 }: ButtonProps) {
   const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+  const glowClass = glow && variant === 'primary' ? 'btn-glow' : ''
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${
     fullWidth ? 'w-full' : ''
-  } ${className}`
+  } ${glowClass} ${className}`
 
   if ('href' in props && props.href) {
     return (

@@ -73,15 +73,15 @@ export function ProcessSection() {
 
         {/* Timeline */}
         <div className="relative mb-16">
-          {/* Line */}
-          <div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gammart-green-dark/20" />
+          {/* Line - positioned at the center of the circles */}
+          <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gammart-green-dark/20" />
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4">
             {steps.map((step, index) => (
               <ScrollReveal key={step.number} delay={index * 100}>
-                <div className="relative text-center group">
+                <div className="flex flex-col items-center text-center group">
                   {/* Circle */}
-                  <div className="relative z-10 mx-auto mb-4">
+                  <div className="relative z-10 mb-6">
                     <div className="w-24 h-24 rounded-full bg-white border-4 border-gammart-green-dark flex flex-col items-center justify-center shadow-lg group-hover:bg-gammart-green-dark group-hover:scale-110 transition-all duration-300">
                       <span className="text-gammart-green-dark group-hover:text-white transition-colors">
                         {step.icon}
@@ -92,9 +92,11 @@ export function ProcessSection() {
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <h3 className="font-bold text-gammart-green-dark text-lg mb-1">{step.title}</h3>
-                  <p className="text-sm text-gray-600">{step.description}</p>
+                  {/* Content - fixed height container for alignment */}
+                  <div className="flex flex-col items-center">
+                    <h3 className="font-bold text-gammart-green-dark text-lg mb-2">{step.title}</h3>
+                    <p className="text-sm text-gray-600 max-w-[120px]">{step.description}</p>
+                  </div>
                 </div>
               </ScrollReveal>
             ))}
@@ -103,7 +105,7 @@ export function ProcessSection() {
 
         <ScrollReveal>
           <div className="text-center">
-            <Button href="/contact" variant="primary" size="lg">
+            <Button href="/contact" variant="primary" size="lg" glow>
               Démarrer mon projet
             </Button>
           </div>
