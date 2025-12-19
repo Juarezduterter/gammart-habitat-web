@@ -14,7 +14,7 @@ const services = [
   {
     title: 'ITI - Isolation par l\'Intérieur',
     description: 'Solution ciblée, idéale dans certains cas techniques ou contraintes de façade.',
-    href: '/isolation/iti',
+    href: '/isolation-thermique-interieur-bas-rhin',
     icon: '/images/pictos/Isolation-Thermique-par-l-Intérieur.svg',
   },
   {
