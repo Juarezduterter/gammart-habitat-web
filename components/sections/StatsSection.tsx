@@ -60,26 +60,62 @@ function AnimatedCounter({
 
 export function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
+  const isScrollingRef = useRef(false)
 
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
 
+    // Custom smooth scroll with easing
+    const smoothScrollTo = (targetY: number, duration: number = 800) => {
+      if (isScrollingRef.current) return
+      isScrollingRef.current = true
+
+      const startY = window.scrollY
+      const difference = targetY - startY
+      const startTime = performance.now()
+
+      const easeInOutCubic = (t: number): number => {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+      }
+
+      const animateScroll = (currentTime: number) => {
+        const elapsed = currentTime - startTime
+        const progress = Math.min(elapsed / duration, 1)
+        const easedProgress = easeInOutCubic(progress)
+
+        window.scrollTo(0, startY + difference * easedProgress)
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll)
+        } else {
+          setTimeout(() => {
+            isScrollingRef.current = false
+          }, 100)
+        }
+      }
+
+      requestAnimationFrame(animateScroll)
+    }
+
     const handleScroll = () => {
+      if (isScrollingRef.current) return
+
       const rect = section.getBoundingClientRect()
       const windowHeight = window.innerHeight
-      const threshold = windowHeight * 0.3
+      const threshold = windowHeight * 0.25
 
-      // If section is partially visible and close to viewport
-      if (rect.top > -threshold && rect.top < threshold) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // If section is partially visible and close to viewport top
+      if (rect.top > -threshold && rect.top < threshold && Math.abs(rect.top) > 10) {
+        const targetY = window.scrollY + rect.top
+        smoothScrollTo(targetY, 600)
       }
     }
 
     let scrollTimeout: NodeJS.Timeout
     const debouncedScroll = () => {
       clearTimeout(scrollTimeout)
-      scrollTimeout = setTimeout(handleScroll, 100)
+      scrollTimeout = setTimeout(handleScroll, 150)
     }
 
     window.addEventListener('scroll', debouncedScroll, { passive: true })
