@@ -583,142 +583,146 @@ export function AidSimulator() {
     const eligibleCount = results.filter(r => r.eligible).length
 
     return (
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gammart-green-dark/10 rounded-full mb-4">
-            <span className="text-2xl">🎉</span>
-            <span className="font-semibold text-gammart-green-dark">Résultats de votre simulation</span>
-          </div>
-          <h3 className="text-3xl font-bold text-gammart-green-dark">
-            Vous êtes éligible à {eligibleCount} aide{eligibleCount > 1 ? 's' : ''}
-          </h3>
-        </div>
-
-        {/* Results grid */}
-        <div className="grid gap-4">
-          {results.map((aid) => (
-            <div
-              key={aid.id}
-              className={`p-6 rounded-2xl border-2 ${aid.eligible ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  {/* Icon placeholder */}
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${aid.eligible ? 'bg-green-100' : 'bg-gray-200'}`}>
-                    {aid.eligible ? (
-                      <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    )}
-                  </div>
-                  <div>
-                    <h4 className={`font-bold text-lg ${aid.eligible ? 'text-green-800' : 'text-gray-500'}`}>
-                      {aid.name}
-                    </h4>
-                    <p className="text-sm text-gray-600">{aid.description}</p>
-                  </div>
-                </div>
-                {/* Amount - blurred if not submitted */}
-                {aid.eligible && aid.amount !== null && (
-                  <div className="text-right">
-                    <div className={`text-2xl font-bold text-green-600 ${!contactSubmitted ? 'blur-md select-none' : ''}`}>
-                      {aid.amount.toLocaleString('fr-FR')} €
-                    </div>
-                    {!contactSubmitted && (
-                      <p className="text-xs text-gray-500">Montant masqué</p>
-                    )}
-                  </div>
-                )}
-              </div>
+      <div className="max-w-6xl mx-auto">
+        {/* Header row: Eligibility + Total side by side */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* Left: Eligibility message */}
+          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 flex items-center gap-4">
+            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-          ))}
-        </div>
+            <div>
+              <p className="text-green-600 font-medium text-sm">Résultats de votre simulation</p>
+              <h3 className="text-2xl md:text-3xl font-bold text-green-800">
+                Vous êtes éligible à {eligibleCount} aide{eligibleCount > 1 ? 's' : ''}
+              </h3>
+            </div>
+          </div>
 
-        {/* Total */}
-        {totalAids > 0 && (
-          <div className="p-6 rounded-2xl bg-gammart-green-dark text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gammart-green-sage">Estimation totale des aides</p>
-                <p className="text-sm text-white/70">Montant maximum cumulable</p>
-              </div>
-              <div className={`text-4xl font-bold ${!contactSubmitted ? 'blur-lg select-none' : ''}`}>
+          {/* Right: Total amount */}
+          <div className="bg-gradient-to-br from-gammart-green-dark to-gammart-green-leaf rounded-2xl p-6 flex items-center justify-between">
+            <div>
+              <p className="text-gammart-green-sage font-medium text-sm">Estimation totale</p>
+              <p className="text-white/70 text-xs">Montant maximum cumulable</p>
+            </div>
+            <div className="text-right">
+              <div className={`text-3xl md:text-4xl font-bold text-white ${!contactSubmitted ? 'blur-lg select-none' : ''}`}>
                 {totalAids.toLocaleString('fr-FR')} €
               </div>
+              {!contactSubmitted && (
+                <p className="text-white/60 text-xs mt-1">Débloquer ci-dessous</p>
+              )}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Contact form to reveal amounts */}
-        {!contactSubmitted && (
-          <div className="p-6 rounded-2xl bg-gammart-beige">
-            <h4 className="text-xl font-bold text-gammart-green-dark mb-4">
-              Recevez vos résultats détaillés
-            </h4>
-            <p className="text-gray-600 mb-6">
-              Remplissez vos coordonnées pour voir les montants exacts et recevoir un récapitulatif par email.
-            </p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+        {/* Main content: Aids grid + Contact form side by side */}
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Left: Aids grid (2 columns) */}
+          <div className="lg:col-span-2">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {results.map((aid) => (
+                <div
+                  key={aid.id}
+                  className={`p-4 rounded-xl border-2 text-center transition-all ${aid.eligible ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50 opacity-60'}`}
+                >
+                  {/* Icon */}
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ${aid.eligible ? 'bg-green-500' : 'bg-gray-300'}`}>
+                    {aid.eligible ? (
+                      <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </div>
+                  {/* Name */}
+                  <h4 className={`font-bold text-sm mb-1 ${aid.eligible ? 'text-green-800' : 'text-gray-500'}`}>
+                    {aid.name}
+                  </h4>
+                  {/* Amount */}
+                  {aid.eligible && aid.amount !== null ? (
+                    <div className={`text-lg font-bold text-green-600 ${!contactSubmitted ? 'blur-md select-none' : ''}`}>
+                      {aid.amount.toLocaleString('fr-FR')} €
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-400">
+                      {aid.eligible ? 'Éligible' : 'Non éligible'}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Contact form */}
+          {!contactSubmitted ? (
+            <div className="bg-gammart-beige rounded-2xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-6 h-6 text-gammart-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <h4 className="text-lg font-bold text-gammart-green-dark">
+                  Voir les montants
+                </h4>
+              </div>
+              <p className="text-gray-600 text-sm mb-4">
+                Remplissez vos coordonnées pour débloquer les montants exacts.
+              </p>
+              <div className="space-y-3">
                 <input
                   type="text"
                   value={data.nom}
                   onChange={(e) => updateData({ nom: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gammart-green-dark focus:outline-none"
-                  placeholder="Jean Dupont"
+                  className="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gammart-green-dark focus:outline-none text-sm"
+                  placeholder="Nom complet"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
                 <input
                   type="tel"
                   value={data.telephone}
                   onChange={(e) => updateData({ telephone: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gammart-green-dark focus:outline-none"
-                  placeholder="06 12 34 56 78"
+                  className="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gammart-green-dark focus:outline-none text-sm"
+                  placeholder="Téléphone"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input
                   type="email"
                   value={data.email}
                   onChange={(e) => updateData({ email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-gammart-green-dark focus:outline-none"
-                  placeholder="jean.dupont@email.com"
+                  className="w-full px-4 py-2.5 rounded-lg border-2 border-gray-200 focus:border-gammart-green-dark focus:outline-none text-sm"
+                  placeholder="Email"
                 />
+                <button
+                  onClick={handleContactSubmit}
+                  disabled={!data.nom || !data.telephone || !data.email}
+                  className="w-full py-3 bg-gammart-green-dark text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gammart-green-leaf transition-colors text-sm"
+                >
+                  Débloquer les montants
+                </button>
               </div>
-              <button
-                onClick={handleContactSubmit}
-                disabled={!data.nom || !data.telephone || !data.email}
-                className="w-full py-4 bg-gammart-green-dark text-white rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gammart-green-leaf transition-colors"
-              >
-                Voir les montants exacts
-              </button>
             </div>
-          </div>
-        )}
-
-        {/* CTA after submission */}
-        {contactSubmitted && (
-          <div className="text-center space-y-4">
-            <p className="text-gray-600">
-              Un conseiller Gammart Habitat vous contactera pour vous accompagner dans vos démarches.
-            </p>
-            <Button href="/contact" variant="primary" size="lg" glow>
-              Demander un devis personnalisé
-            </Button>
-          </div>
-        )}
+          ) : (
+            <div className="bg-green-50 rounded-2xl p-6 flex flex-col justify-center items-center text-center">
+              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h4 className="text-lg font-bold text-green-800 mb-2">Montants débloqués</h4>
+              <p className="text-sm text-gray-600 mb-4">Un conseiller vous contactera sous 24h.</p>
+              <Button href="/contact" variant="primary" size="sm">
+                Demander un devis
+              </Button>
+            </div>
+          )}
+        </div>
 
         {/* Restart button */}
-        <div className="text-center">
+        <div className="text-center mt-6">
           <button
             onClick={() => {
               setStep(0)
@@ -727,7 +731,7 @@ export function AidSimulator() {
               setContactSubmitted(false)
               setResults([])
             }}
-            className="text-gammart-green-dark hover:underline"
+            className="text-gammart-green-dark hover:underline text-sm"
           >
             ← Recommencer la simulation
           </button>
