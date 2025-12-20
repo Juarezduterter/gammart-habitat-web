@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import { Button } from '@/components/ui/Button'
+import { AidSimulator } from '@/components/simulator/AidSimulator'
 
 export const metadata: Metadata = {
   title: 'Aides rénovation énergétique Alsace | MaPrimeRénov\', CEE, éco-PTZ, TVA 5,5%',
@@ -135,8 +136,32 @@ export default function AidesFinancementsPage() {
         </div>
       </section>
 
-      {/* Why aids exist */}
+      {/* Simulator Section */}
       <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gammart-green-dark/10 rounded-full mb-6">
+                <svg className="w-5 h-5 text-gammart-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <span className="font-semibold text-gammart-green-dark">Simulateur officiel</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gammart-green-dark mb-6">
+                Simulez vos droits aux aides à la rénovation
+              </h2>
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                Répondez à quelques questions pour découvrir les aides auxquelles vous êtes éligible. Calcul basé sur le modèle officiel <strong>Mes Aides Réno</strong> du gouvernement.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <AidSimulator />
+        </div>
+      </section>
+
+      {/* Why aids exist */}
+      <section className="py-20 md:py-28 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <ScrollReveal>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gammart-green-dark mb-8">
@@ -153,7 +178,7 @@ export default function AidesFinancementsPage() {
       </section>
 
       {/* Aides cards */}
-      <section className="py-20 md:py-28 bg-gray-50">
+      <section className="py-20 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="text-center mb-16">
@@ -169,7 +194,7 @@ export default function AidesFinancementsPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {aides.map((aide, index) => (
               <ScrollReveal key={aide.name} delay={index * 100}>
-                <div className="bg-white rounded-2xl p-8 h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-gammart-green-dark">
+                <div className="bg-gray-50 rounded-2xl p-8 h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-gammart-green-dark">
                   <div className="w-14 h-14 bg-gammart-green-dark/10 rounded-xl flex items-center justify-center text-gammart-green-dark mb-6">
                     {aide.icon}
                   </div>
@@ -228,7 +253,7 @@ export default function AidesFinancementsPage() {
           <ScrollReveal delay={500}>
             <div className="text-center">
               <Button href="/contact" variant="secondary" size="lg">
-                Estimer mes aides gratuitement
+                Être accompagné gratuitement
               </Button>
             </div>
           </ScrollReveal>
@@ -243,11 +268,11 @@ export default function AidesFinancementsPage() {
               Prêt à financer votre projet de rénovation ?
             </h2>
             <p className="text-xl text-gray-700 mb-10">
-              Contactez-nous pour une simulation gratuite de vos aides et un accompagnement personnalisé dans vos démarches.
+              Contactez-nous pour un accompagnement personnalisé dans vos démarches d'aides.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button href="/contact" variant="primary" size="lg">
-                Demander une simulation
+              <Button href="/contact" variant="primary" size="lg" glow>
+                Demander un devis
               </Button>
               <Button href="tel:0763982357" variant="outline" size="lg">
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
