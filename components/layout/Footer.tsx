@@ -6,8 +6,8 @@ export function Footer() {
 
   const servicesLinks = [
     { label: 'ITE - Isolation Extérieure', href: '/isolation/ite' },
-    { label: 'ITI - Isolation Intérieure', href: '/isolation/iti' },
-    { label: 'Isolation des Combles', href: '/isolation/combles' },
+    { label: 'ITI - Isolation Intérieure', href: '/isolation-thermique-interieur-bas-rhin' },
+    { label: 'Isolation des Combles', href: '/isolation-combles-bas-rhin' },
     { label: 'Bardage & Ravalement', href: '/efficacite-energetique/bardage-ravalement' },
     { label: 'Ventilation VMC', href: '/efficacite-energetique/ventilation' },
   ]

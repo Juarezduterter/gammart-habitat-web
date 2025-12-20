@@ -93,6 +93,36 @@ const steps = [
   },
 ]
 
+const simulationHighlights = [
+  {
+    title: 'Calcul officiel et ouvert',
+    description: 'Nous nous appuyons sur le modèle publicodes open source MesAidesRéno maintenu par beta.gouv (dépôt reno) pour rester alignés avec les règles nationales.',
+    icon: (
+      <svg className="w-10 h-10 text-gammart-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Vision claire des aides',
+    description: 'MaPrimeRénov\', CEE, éco-PTZ, TVA réduite : identifiez rapidement ce qui est mobilisable pour votre projet en Alsace.',
+    icon: (
+      <svg className="w-10 h-10 text-gammart-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Simulation guidée',
+    description: 'On vous aide à interpréter le résultat, prioriser les travaux et préparer les justificatifs avant de déposer les dossiers.',
+    icon: (
+      <svg className="w-10 h-10 text-gammart-green-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 0l-2-2m2 2l-2 2m-2 9h6m0 0l-2 2m2-2l-2-2M5 12h.01M7 12h.01M9 12h.01M11 12h.01" />
+      </svg>
+    ),
+  },
+]
+
 export default function AidesFinancementsPage() {
   return (
     <>
@@ -132,6 +162,66 @@ export default function AidesFinancementsPage() {
               </div>
             </div>
           </ScrollReveal>
+        </div>
+      </section>
+
+      {/* Simulation CTA */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+            <ScrollReveal>
+              <div>
+                <p className="uppercase tracking-widest text-gammart-green-dark font-semibold mb-3 text-sm">
+                  Simulez vos droits aux aides à la rénovation
+                </p>
+                <h2 className="text-3xl md:text-4xl font-bold text-gammart-green-dark mb-4">
+                  Lancez une simulation fiable en quelques minutes
+                </h2>
+                <p className="text-lg text-gray-700 mb-6">
+                  Connectée au référentiel open source MesAidesRéno (projet reno de beta.gouv), cette simulation vous permet d&rsquo;avoir une première estimation des aides mobilisables avant même la visite technique.
+                </p>
+                <div className="space-y-4">
+                  {simulationHighlights.map((item) => (
+                    <div key={item.title} className="flex gap-4 items-start">
+                      <div className="flex-shrink-0">{item.icon}</div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-gammart-green-dark">{item.title}</h3>
+                        <p className="text-gray-700">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={150}>
+              <div className="bg-gray-50 border border-gammart-green-dark/10 rounded-2xl p-8 shadow-lg">
+                <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gammart-beige text-gammart-green-dark text-sm font-semibold mb-4">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Simulation officielle
+                </div>
+                <p className="text-lg text-gray-800 font-semibold mb-2">
+                  Utilisez le simulateur public et open source pour estimer vos aides.
+                </p>
+                <p className="text-gray-700 mb-6">
+                  Résultats indicatifs, affinés ensuite par notre équipe avec les justificatifs adaptés (revenus, travaux prévus, logement).
+                </p>
+                <div className="flex flex-col gap-3">
+                  <Button href="https://mesaides.france-renov.gouv.fr/" variant="primary" size="lg" target="_blank" rel="noreferrer">
+                    Lancer la simulation officielle
+                  </Button>
+                  <Button href="/contact" variant="secondary" size="lg">
+                    Être accompagné pour ma simulation
+                  </Button>
+                  <p className="text-xs text-gray-500">
+                    Source : dépôt open source <a className="underline" href="https://github.com/betagouv/reno" target="_blank" rel="noreferrer">beta.gouv/reno</a> (modèle Publicodes MesAidesRéno).
+                  </p>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 

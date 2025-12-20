@@ -104,7 +104,7 @@ const faqs = [
 const relatedServices = [
   {
     title: 'Isolation des Combles',
-    href: '/isolation/combles',
+    href: '/isolation-combles-bas-rhin',
     icon: '/images/pictos/Isolation-Combles-Perdus.svg',
   },
   {

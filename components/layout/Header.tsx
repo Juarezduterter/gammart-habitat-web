@@ -30,8 +30,8 @@ export function Header() {
       label: 'Isolation du logement',
       subMenu: [
         { label: 'ITE - Isolation par l\'Extérieur', href: '/isolation/ite' },
-        { label: 'ITI - Isolation par l\'Intérieur', href: '/isolation/iti' },
-        { label: 'Isolation des Combles', href: '/isolation/combles' },
+        { label: 'ITI - Isolation par l\'Intérieur', href: '/isolation-thermique-interieur-bas-rhin' },
+        { label: 'Isolation des Combles', href: '/isolation-combles-bas-rhin' },
         { label: 'Isolation Plancher Bas', href: '/isolation/plancher-bas' },
       ],
     },

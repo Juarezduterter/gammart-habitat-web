@@ -14,19 +14,19 @@ const services = [
   {
     title: 'ITI - Isolation par l\'Intérieur',
     description: 'Solution ciblée, idéale dans certains cas techniques ou contraintes de façade.',
-    href: '/isolation/iti',
+    href: '/isolation-thermique-interieur-bas-rhin',
     icon: '/images/pictos/Isolation-Thermique-par-l-Intérieur.svg',
   },
   {
     title: 'Isolation des Combles',
     description: 'Souvent le meilleur ROI : limiter la chaleur qui s\'échappe par le haut.',
-    href: '/isolation/combles/combles-perdus',
+    href: '/isolation-combles-bas-rhin',
     icon: '/images/pictos/Isolation-Combles-Perdus.svg',
   },
   {
     title: 'Isolation Rampants',
     description: 'Confort hiver/été pour les pièces sous toiture (combles aménageables).',
-    href: '/isolation/combles/combles-amenageables',
+    href: '/isolation-combles-bas-rhin',
     icon: '/images/pictos/Isolation-Rampants-de-Toiture.svg',
   },
   {
