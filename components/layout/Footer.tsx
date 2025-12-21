@@ -9,7 +9,7 @@ export function Footer() {
     { label: 'ITI - Isolation Intérieure', href: '/isolation/iti' },
     { label: 'Isolation des Combles', href: '/isolation/combles' },
     { label: 'Bardage & Ravalement', href: '/efficacite-energetique/bardage-ravalement' },
-    { label: 'Ventilation VMC', href: '/efficacite-energetique/ventilation' },
+    { label: 'Ventilation VMC', href: '/installation-vmc-bas-rhin' },
   ]
 
   const companyLinks = [

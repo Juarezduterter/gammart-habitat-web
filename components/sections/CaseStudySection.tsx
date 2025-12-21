@@ -27,7 +27,7 @@ export function CaseStudySection() {
                 <div className="space-y-4">
                   <div className="rounded-2xl overflow-hidden shadow-lg">
                     <Image
-                      src="/images/photos/renovation-2.jpeg"
+                      src="/images/photos/air-water-heat-pump.jpeg"
                       alt="Rénovation avant"
                       width={300}
                       height={200}
@@ -36,7 +36,7 @@ export function CaseStudySection() {
                   </div>
                   <div className="rounded-2xl overflow-hidden shadow-lg">
                     <Image
-                      src="/images/photos/renovation-3.jpeg"
+                      src="/images/photos/renovation-team-3.jpeg"
                       alt="Travaux en cours"
                       width={300}
                       height={200}
@@ -47,7 +47,7 @@ export function CaseStudySection() {
                 <div className="pt-8">
                   <div className="rounded-2xl overflow-hidden shadow-lg">
                     <Image
-                      src="/images/photos/renovation-4.jpeg"
+                      src="/images/photos/renovation-team-2.jpeg"
                       alt="Rénovation après"
                       width={300}
                       height={400}

@@ -275,7 +275,7 @@ export default function ComblesPage() {
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden shadow-2xl">
                   <Image
-                    src="/images/photos/renovation-3.jpeg"
+                    src="/images/photos/spray-foam-wall.jpeg"
                     alt="Isolation des combles Bas-Rhin"
                     width={600}
                     height={400}

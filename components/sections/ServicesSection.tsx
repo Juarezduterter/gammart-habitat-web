@@ -32,7 +32,7 @@ const services = [
   {
     title: 'Isolation Plancher Bas',
     description: 'Stopper le froid qui remonte, améliorer la sensation au sol.',
-    href: '/isolation/plancher-bas',
+    href: '/isolation-plancher-bas-bas-rhin',
     icon: '/images/pictos/Isolation-Plancher-Bas.svg',
   },
   {
@@ -44,7 +44,7 @@ const services = [
   {
     title: 'Ventilation VMC',
     description: 'Une maison plus saine, moins d\'humidité, meilleure qualité d\'air.',
-    href: '/efficacite-energetique/ventilation',
+    href: '/installation-vmc-bas-rhin',
     icon: '/images/pictos/VMC.svg',
   },
 ]

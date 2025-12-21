@@ -193,7 +193,7 @@ export default function ITEPage() {
             <ScrollReveal direction="right">
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden shadow-2xl">
-                  <Image src="/images/photos/renovation-1.jpeg" alt="Isolation thermique par l'extérieur Bas-Rhin" width={600} height={400} className="w-full h-auto object-cover" />
+                  <Image src="/images/photos/external-wall-insulation.jpeg" alt="Isolation thermique par l'extérieur Bas-Rhin" width={600} height={400} className="w-full h-auto object-cover" />
                 </div>
                 <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-xl hidden md:block">
                   <div className="text-4xl font-bold text-gammart-green-dark">-57%</div>
@@ -272,7 +272,7 @@ export default function ITEPage() {
             {techniques.map((technique, index) => (
               <ScrollReveal key={technique.title} delay={index * 150}>
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg h-full">
-                  <div className="h-48 overflow-hidden"><Image src="/images/photos/renovation-1.jpeg" alt={technique.title} width={400} height={200} className="w-full h-full object-cover" /></div>
+                  <div className="h-48 overflow-hidden"><Image src="/images/photos/mineral-wool-facade.jpeg" alt={technique.title} width={400} height={200} className="w-full h-full object-cover" /></div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gammart-green-dark mb-3">{technique.title}</h3>
                     <p className="text-gray-600 mb-4">{technique.description}</p>

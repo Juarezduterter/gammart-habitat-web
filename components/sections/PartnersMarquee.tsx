@@ -4,11 +4,17 @@ import Image from 'next/image'
 
 const partners = [
   { name: 'Rockwool', logo: '/images/partners/rockwool.png' },
-  { name: 'Weber', logo: '/images/partners/weber.png' },
   { name: 'Isover', logo: '/images/partners/isover.png' },
   { name: 'Knauf', logo: '/images/partners/knauf.png' },
-  { name: 'STO', logo: '/images/partners/sto.png' },
-  { name: 'Parexlanko', logo: '/images/partners/parexlanko.png' },
+  { name: 'Sto', logo: '/images/partners/sto.svg' },
+  { name: 'Soprema', logo: '/images/partners/soprema.png' },
+  { name: 'Sauter', logo: '/images/partners/sauter.png' },
+  { name: 'Atlantic', logo: '/images/partners/atlantic.png' },
+  { name: 'Roma', logo: '/images/partners/roma.png' },
+  { name: 'Aldes', logo: '/images/partners/aldes.png' },
+  { name: 'Actis', logo: '/images/partners/actis.png' },
+  { name: 'Ursa', logo: '/images/partners/ursa.png' },
+  { name: 'Tryba', logo: '/images/partners/tryba.png' },
 ]
 
 export function PartnersMarquee() {
