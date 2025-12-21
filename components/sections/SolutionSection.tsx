@@ -32,7 +32,7 @@ export function SolutionSection() {
             <div className="relative">
               <div className="rounded-3xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/images/photos/thermal-image-building.jpeg"
+                  src="/images/photos/couple-energy-efficiency.jpeg"
                   alt="Rénovation énergétique"
                   width={600}
                   height={400}
