@@ -381,7 +381,7 @@ export default function BardageRavalementPage() {
                 fragiliser l’enduit, marquer la teinte ou créer des zones poreuses.
               </p>
               <p>
-                Le <strong>bardage</strong> est une solution de finition qui consiste à poser un parement sur la façade. Très souvent, il est posé en
+                Le <strong>bardage</strong> est une solution de finition qui consiste à poser un parement sur la façade. Très souvent, il est posé en{' '}
                 <strong>bardage ventilé</strong> : une lame d’air entre le support et le parement améliore la durabilité et la gestion de l’humidité.
               </p>
             </div>

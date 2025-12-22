@@ -208,15 +208,6 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 opacity-0 animate-fade-in-up delay-800" style={{ animationFillMode: 'forwards' }}>
-        <div className="flex flex-col items-center text-gammart-green-dark/60">
-          <span className="text-sm mb-2">Découvrir</span>
-          <div className="w-6 h-10 border-2 border-gammart-green-dark/30 rounded-full p-1">
-            <div className="w-1.5 h-3 bg-gammart-green-dark/50 rounded-full animate-bounce mx-auto" />
-          </div>
-        </div>
-      </div>
     </section>
   )
 }

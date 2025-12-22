@@ -72,6 +72,110 @@ const TRAVAUX_OPTIONS = [
   { id: 'poele-granules', label: 'Poêle à granulés', rule: 'gestes . chauffage . bois . poêle . à granulés' },
 ]
 
+// Gestes d'isolation soumis à la condition de couplage en maison individuelle
+// (doivent être couplés à un geste de chauffage/ECS pour bénéficier de MPR par gestes)
+const ISOLATION_GESTES = [
+  'isolation-murs-ext',
+  'isolation-murs-int',
+  'isolation-combles',
+  'isolation-plancher',
+]
+
+// Gestes de chauffage/ECS qui permettent le couplage
+const CHAUFFAGE_ECS_GESTES = [
+  'pac-air-eau',
+  'chauffe-eau-thermo',
+  'poele-granules',
+]
+
+// Barèmes de revenus hors Île-de-France (2024)
+// Format: [très modeste, modeste, intermédiaire] - au-delà = supérieur
+const BAREME_REVENUS_PROVINCE = {
+  1: [17173, 22015, 30844],
+  2: [25115, 32197, 45340],
+  3: [30206, 38719, 54592],
+  4: [35285, 45234, 63844],
+  5: [40388, 51775, 73098],
+  // Par personne supplémentaire
+  plus: [5094, 6525, 9254],
+}
+
+// Barèmes de revenus Île-de-France (2024)
+const BAREME_REVENUS_IDF = {
+  1: [23541, 28657, 40018],
+  2: [34551, 42058, 58827],
+  3: [41493, 50513, 70382],
+  4: [48447, 58981, 82839],
+  5: [55427, 67473, 94844],
+  // Par personne supplémentaire
+  plus: [6970, 8486, 12006],
+}
+
+// Tarifs MPR par gestes selon la classe de revenus (€/m²)
+// Format: [très modeste, modeste, intermédiaire, supérieur]
+const TARIFS_MPR_GESTES = {
+  'isolation-murs-ext': { tarifs: [75, 60, 40, 0], maxSurface: 100 }, // ITE - max 100m²
+  'isolation-murs-int': { tarifs: [25, 20, 15, 0], maxSurface: null }, // ITI
+  'isolation-combles': { tarifs: [25, 20, 15, 0], maxSurface: null }, // Rampants/combles
+  'isolation-plancher': { tarifs: [0, 0, 0, 0], maxSurface: null }, // Plancher bas (pas de MPR par gestes)
+}
+
+type ClasseRevenus = 'très modeste' | 'modeste' | 'intermédiaire' | 'supérieur'
+
+// Fonction pour calculer la classe de revenus
+function getClasseRevenus(revenu: number, personnes: number, isIdf: boolean): ClasseRevenus {
+  const bareme = isIdf ? BAREME_REVENUS_IDF : BAREME_REVENUS_PROVINCE
+
+  // Obtenir les seuils pour le nombre de personnes
+  let seuils: number[]
+  if (personnes <= 5) {
+    seuils = bareme[personnes as 1 | 2 | 3 | 4 | 5]
+  } else {
+    // Plus de 5 personnes : seuils de 5 + (personnes - 5) * supplément
+    const base = bareme[5]
+    const supplement = personnes - 5
+    seuils = [
+      base[0] + supplement * bareme.plus[0],
+      base[1] + supplement * bareme.plus[1],
+      base[2] + supplement * bareme.plus[2],
+    ]
+  }
+
+  if (revenu <= seuils[0]) return 'très modeste'
+  if (revenu <= seuils[1]) return 'modeste'
+  if (revenu <= seuils[2]) return 'intermédiaire'
+  return 'supérieur'
+}
+
+// Fonction pour calculer le montant MPR par gestes
+function calculateMprGestes(
+  typesTravaux: string[],
+  surface: number,
+  classeRevenus: ClasseRevenus
+): number {
+  const classeIndex = {
+    'très modeste': 0,
+    'modeste': 1,
+    'intermédiaire': 2,
+    'supérieur': 3,
+  }[classeRevenus]
+
+  let total = 0
+
+  for (const travail of typesTravaux) {
+    const config = TARIFS_MPR_GESTES[travail as keyof typeof TARIFS_MPR_GESTES]
+    if (config) {
+      const tarif = config.tarifs[classeIndex]
+      const surfaceApplicable = config.maxSurface
+        ? Math.min(surface, config.maxSurface)
+        : surface
+      total += tarif * surfaceApplicable
+    }
+  }
+
+  return total
+}
+
 export function AidSimulator() {
   const [step, setStep] = useState(0)
   const [data, setData] = useState<SimulatorData>(initialData)
@@ -90,34 +194,100 @@ export function AidSimulator() {
     try {
       const engine = new Publicodes(rules)
 
-      // Build situation object
+      // Determine if owner-occupant or landlord
+      const isOwnerOccupant = data.proprietaireStatut === 'proprietaire'
+
+      // Build situation object for mesaidesreno model
+      // Key fixes:
+      // 1. Use 'propriétaire' (with accent) as the valid status value
+      // 2. Booleans in Publicodes are 'oui'/'non' without quotes in the value
+      // 3. Need to set résidence principale propriétaire or locataire based on status
       const situation: Record<string, string | number> = {
-        'vous . propriétaire . statut': `'${data.proprietaireStatut}'`,
+        // Owner status - both occupant and landlord are 'propriétaire' in the model
+        'vous . propriétaire . statut': "'propriétaire'",
+
+        // Housing type
         'logement . type': `'${data.logementType}'`,
         'logement . surface': `${data.surface} m2`,
         'logement . année de construction': data.anneeConstruction,
+
+        // Household
         'ménage . personnes': `${data.nombrePersonnes} personne`,
         'ménage . revenu': `${data.revenuFiscal} €`,
+
+        // DPE (1=A to 7=G)
         'DPE . actuel': data.dpeActuel,
         'projet . DPE visé': data.dpeVise,
-        'logement . propriétaire occupant': data.proprietaireStatut === 'proprietaire' ? 'oui' : 'non',
-        'logement . résidence principale': 'oui',
+
+        // Owner occupant vs landlord
+        'logement . propriétaire occupant': isOwnerOccupant ? 'oui' : 'non',
       }
 
-      // Add Île-de-France region if applicable
+      // Set résidence principale based on owner type
+      if (isOwnerOccupant) {
+        situation['logement . résidence principale propriétaire'] = 'oui'
+      } else {
+        // For landlords, the tenant's primary residence
+        situation['logement . résidence principale locataire'] = 'oui'
+      }
+
+      // Add region code - "11" is Île-de-France, others default to province
+      // The model calculates 'ménage . région . IdF' from 'ménage . code région = "11"'
       if (data.isIleDeFrance) {
-        situation['ménage . région . IdF'] = 'oui'
         situation['ménage . code région'] = '"11"'
+      } else {
+        // Use Grand Est code (44) as default for non-IdF
+        situation['ménage . code région'] = '"44"'
+      }
+
+      // Add selected work types (gestes) to the situation
+      // First, set all gestes to 'non' by default, then enable selected ones
+      const allGestesRules = TRAVAUX_OPTIONS.map(t => t.rule)
+      for (const rule of allGestesRules) {
+        situation[rule] = 'non'
+      }
+
+      // Enable selected gestes
+      const selectedTravaux = TRAVAUX_OPTIONS.filter(t => data.typesTravaux.includes(t.id))
+      for (const travail of selectedTravaux) {
+        situation[travail.rule] = 'oui'
       }
 
       engine.setSituation(situation)
 
+      // Debug: log the situation and key evaluations
+      console.log('=== SIMULATION DEBUG ===')
+      console.log('Situation:', situation)
+
       const aidResults: AidResult[] = []
+
+      // Debug: check common conditions
+      try {
+        const conditionsCommunes = engine.evaluate('conditions communes')
+        const proprietaireCondition = engine.evaluate('vous . propriétaire . condition')
+        const auMoins15Ans = engine.evaluate('logement . au moins 15 ans')
+        const residencePrincipale = engine.evaluate('logement . résidence principale')
+        const revenuClasse = engine.evaluate('ménage . revenu . classe')
+        const sauts = engine.evaluate('sauts')
+
+        console.log('Conditions communes:', conditionsCommunes.nodeValue)
+        console.log('- Propriétaire condition:', proprietaireCondition.nodeValue)
+        console.log('- Au moins 15 ans:', auMoins15Ans.nodeValue)
+        console.log('- Résidence principale:', residencePrincipale.nodeValue)
+        console.log('Revenu classe:', revenuClasse.nodeValue)
+        console.log('Sauts DPE:', sauts.nodeValue)
+      } catch (e) {
+        console.log('Debug evaluation error:', e)
+      }
 
       // Check MPR accompagnée
       try {
         const mprAccompagneeEligible = engine.evaluate('MPR . accompagnée . éligible')
         const mprAccompagneeMontant = engine.evaluate('MPR . accompagnée . montant')
+
+        console.log('MPR Accompagnée - éligible:', mprAccompagneeEligible.nodeValue)
+        console.log('MPR Accompagnée - montant:', mprAccompagneeMontant.nodeValue)
+
         aidResults.push({
           id: 'mpr-accompagnee',
           name: 'MaPrimeRénov\' Accompagnée',
@@ -126,7 +296,8 @@ export function AidSimulator() {
           amount: typeof mprAccompagneeMontant.nodeValue === 'number' ? mprAccompagneeMontant.nodeValue : null,
           description: 'Aide pour une rénovation globale avec accompagnement',
         })
-      } catch {
+      } catch (e) {
+        console.log('MPR Accompagnée error:', e)
         aidResults.push({
           id: 'mpr-accompagnee',
           name: 'MaPrimeRénov\' Accompagnée',
@@ -137,31 +308,26 @@ export function AidSimulator() {
         })
       }
 
-      // Check MPR par gestes
-      try {
-        const mprGestesEligible = engine.evaluate('MPR . non accompagnée . éligible')
-        const mprGestesMontant = engine.evaluate('MPR . non accompagnée . montant')
-        aidResults.push({
-          id: 'mpr-gestes',
-          name: 'MaPrimeRénov\' par gestes',
-          icon: '/images/logos/maprimerenov.svg',
-          eligible: mprGestesEligible.nodeValue === true,
-          amount: typeof mprGestesMontant.nodeValue === 'number' ? mprGestesMontant.nodeValue : null,
-          description: 'Aide pour des travaux spécifiques',
-        })
-      } catch {
-        aidResults.push({
-          id: 'mpr-gestes',
-          name: 'MaPrimeRénov\' par gestes',
-          icon: '/images/logos/maprimerenov.svg',
-          eligible: false,
-          amount: null,
-          description: 'Aide pour des travaux spécifiques',
-        })
-      }
+      // Check MPR par gestes - Calcul basé sur la classe de revenus et les gestes sélectionnés
+      const classeRevenus = getClasseRevenus(data.revenuFiscal, data.nombrePersonnes, data.isIleDeFrance)
+      const mprGestesMontant = calculateMprGestes(data.typesTravaux, data.surface, classeRevenus)
 
-      // Check CEE for selected works
-      const selectedTravaux = TRAVAUX_OPTIONS.filter(t => data.typesTravaux.includes(t.id))
+      console.log('MPR par gestes - classe revenus:', classeRevenus)
+      console.log('MPR par gestes - montant calculé:', mprGestesMontant)
+
+      // MPR par gestes n'est pas éligible pour les revenus supérieurs
+      const mprGestesEligible = classeRevenus !== 'supérieur' && mprGestesMontant > 0
+
+      aidResults.push({
+        id: 'mpr-gestes',
+        name: 'MaPrimeRénov\' par gestes',
+        icon: '/images/logos/maprimerenov.svg',
+        eligible: mprGestesEligible,
+        amount: mprGestesEligible ? mprGestesMontant : null,
+        description: `Classe ${classeRevenus} - Aide pour des travaux spécifiques`,
+      })
+
+      // Check CEE for selected works (selectedTravaux is already defined above)
       let totalCEE = 0
       let ceeEligible = false
 
@@ -284,10 +450,17 @@ export function AidSimulator() {
     setContactSubmitted(true)
   }, [data, results])
 
+  // Calcul du total des aides (exclut l'Éco-PTZ qui est un prêt, pas une subvention)
   const totalAids = useMemo(() => {
     return results
-      .filter(r => r.eligible && r.amount !== null)
+      .filter(r => r.eligible && r.amount !== null && r.id !== 'ptz')
       .reduce((sum, r) => sum + (r.amount || 0), 0)
+  }, [results])
+
+  // Montant Éco-PTZ séparé
+  const ptzAmount = useMemo(() => {
+    const ptz = results.find(r => r.id === 'ptz')
+    return ptz?.eligible ? ptz.amount : null
   }, [results])
 
   const nextStep = () => setStep(prev => prev + 1)
@@ -531,7 +704,12 @@ export function AidSimulator() {
           </div>
         )
 
-      case 6:
+      case 6: {
+        // Vérifier la condition de couplage isolation + chauffage pour les maisons
+        const hasIsolation = data.typesTravaux.some(t => ISOLATION_GESTES.includes(t))
+        const hasChauffage = data.typesTravaux.some(t => CHAUFFAGE_ECS_GESTES.includes(t))
+        const needsCoupling = data.logementType === 'maison' && hasIsolation && !hasChauffage
+
         return (
           <div className="space-y-6">
             <h3 className="text-xl font-bold text-gammart-green-dark">Quels travaux envisagez-vous ?</h3>
@@ -560,6 +738,24 @@ export function AidSimulator() {
                 </button>
               ))}
             </div>
+
+            {/* Information sur le couplage pour les maisons (informatif seulement) */}
+            {needsCoupling && (
+              <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
+                <div className="flex items-start gap-3">
+                  <svg className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <p className="font-semibold text-blue-800">Information</p>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Pour bénéficier de MaPrimeRénov&apos; par gestes sur les travaux d&apos;isolation en maison individuelle, ceux-ci doivent normalement être couplés à un geste de chauffage ou d&apos;eau chaude sanitaire. Cette condition ne s&apos;applique pas aux appartements.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex justify-between pt-4">
               <button onClick={prevStep} className="px-6 py-2 text-gray-600 hover:text-gammart-green-dark">← Retour</button>
               <button
@@ -572,6 +768,7 @@ export function AidSimulator() {
             </div>
           </div>
         )
+      }
 
       default:
         return null
@@ -602,19 +799,35 @@ export function AidSimulator() {
           </div>
 
           {/* Right: Total amount */}
-          <div className="bg-gradient-to-br from-gammart-green-dark to-gammart-green-leaf rounded-2xl p-6 flex items-center justify-between">
-            <div>
-              <p className="text-gammart-green-sage font-medium text-sm">Estimation totale</p>
-              <p className="text-white/70 text-xs">Montant maximum cumulable</p>
-            </div>
-            <div className="text-right">
-              <div className={`text-3xl md:text-4xl font-bold text-white ${!contactSubmitted ? 'blur-lg select-none' : ''}`}>
-                {totalAids.toLocaleString('fr-FR')} €
+          <div className="bg-gradient-to-br from-gammart-green-dark to-gammart-green-leaf rounded-2xl p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gammart-green-sage font-medium text-sm">Estimation totale des aides</p>
+                <p className="text-white/70 text-xs">Subventions cumulables</p>
               </div>
-              {!contactSubmitted && (
-                <p className="text-white/60 text-xs mt-1">Débloquer ci-dessous</p>
-              )}
+              <div className="text-right">
+                <div className={`text-3xl md:text-4xl font-bold text-white ${!contactSubmitted ? 'blur-lg select-none' : ''}`}>
+                  {totalAids.toLocaleString('fr-FR')} €
+                </div>
+                {!contactSubmitted && (
+                  <p className="text-white/60 text-xs mt-1">Débloquer ci-dessous</p>
+                )}
+              </div>
             </div>
+            {/* Éco-PTZ séparé (c'est un prêt, pas une subvention) */}
+            {ptzAmount && (
+              <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-gammart-green-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-white/90 text-sm">Éligible Éco-PTZ</span>
+                </div>
+                <div className={`text-lg font-semibold text-white ${!contactSubmitted ? 'blur-md select-none' : ''}`}>
+                  jusqu&apos;à {ptzAmount.toLocaleString('fr-FR')} €
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

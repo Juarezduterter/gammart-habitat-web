@@ -76,9 +76,38 @@ const benefits = [
 ]
 
 const techniques = [
-  { title: 'Doublage collé', description: 'Panneaux isolants + plaque de plâtre collés directement sur le mur (si support compatible), avec une mise en œuvre rapide.', ideal: 'Murs relativement plans et sains, recherche d\'un chantier efficace.' },
-  { title: 'Ossature métallique (type rails/montants)', description: 'Création d\'une ossature, pose de l\'isolant entre montants, puis plaque de plâtre. Permet de rattraper des défauts de mur et de passer des réseaux.', ideal: 'Murs irréguliers, rénovation intérieure complète, besoin de passages techniques.' },
-  { title: 'Contre-cloison / doublage sur ossature désolidarisée', description: 'Technique qui améliore l\'acoustique et la régularité, utile dans certains cas spécifiques (murs humides à traiter en amont, besoin d\'espace technique).', ideal: 'Recherche de confort acoustique ou contraintes particulières de mur.' },
+  {
+    title: 'Doublage collé',
+    description: 'Panneaux isolants + plaque de plâtre collés directement sur le mur (si support compatible), avec une mise en œuvre rapide.',
+    ideal: 'Murs relativement plans et sains, recherche d\'un chantier efficace.',
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16v12H4z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 9h10M7 13h10" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Ossature métallique (type rails/montants)',
+    description: 'Création d\'une ossature, pose de l\'isolant entre montants, puis plaque de plâtre. Permet de rattraper des défauts de mur et de passer des réseaux.',
+    ideal: 'Murs irréguliers, rénovation intérieure complète, besoin de passages techniques.',
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4h16v16H4z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 10h16M10 4v16" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Contre-cloison / doublage sur ossature désolidarisée',
+    description: 'Technique qui améliore l\'acoustique et la régularité, utile dans certains cas spécifiques (murs humides à traiter en amont, besoin d\'espace technique).',
+    ideal: 'Recherche de confort acoustique ou contraintes particulières de mur.',
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+    ),
+  },
 ]
 
 const materials = [
@@ -275,13 +304,13 @@ export default function ITIPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {techniques.map((technique, index) => (
               <ScrollReveal key={technique.title} delay={index * 150}>
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg h-full">
-                  <div className="h-48 overflow-hidden"><Image src="/images/photos/wood-lamellas-wall.jpeg" alt={technique.title} width={400} height={200} className="w-full h-full object-cover" /></div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gammart-green-dark mb-3">{technique.title}</h3>
-                    <p className="text-gray-600 mb-4">{technique.description}</p>
-                    <p className="text-sm text-gammart-green-leaf font-medium"><strong>Idéal pour :</strong> {technique.ideal}</p>
+                <div className="bg-white rounded-2xl p-6 shadow-lg h-full">
+                  <div className="w-12 h-12 bg-gammart-green-dark/10 rounded-xl flex items-center justify-center text-gammart-green-dark mb-4">
+                    {technique.icon}
                   </div>
+                  <h3 className="text-xl font-bold text-gammart-green-dark mb-3">{technique.title}</h3>
+                  <p className="text-gray-600 mb-4">{technique.description}</p>
+                  <p className="text-sm text-gammart-green-leaf font-medium"><strong>Idéal pour :</strong> {technique.ideal}</p>
                 </div>
               </ScrollReveal>
             ))}

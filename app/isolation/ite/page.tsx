@@ -76,9 +76,38 @@ const benefits = [
 ]
 
 const techniques = [
-  { title: 'Enduit sur isolant (ETICS)', description: 'L\'isolant est fixé sur la façade, puis recouvert d\'un sous-enduit armé (treillis), et d\'un enduit de finition.', ideal: 'Un rendu façade "traditionnel" propre, une rénovation esthétique avec un large choix de textures.' },
-  { title: 'Bardage ventilé', description: 'Une ossature et une lame d\'air ventilée sont mises en œuvre, puis le bardage (bois, composite, métal) est posé en parement.', ideal: 'Un style contemporain, une façade très exposée, ou une solution ventilée et robuste.' },
-  { title: 'Vêture / vêtage', description: 'Panneaux de finition intégrés, posés en système complet, pour une façade à l\'aspect maîtrisé.', ideal: 'Projets où la régularité et la rapidité de mise en œuvre sont prioritaires.' },
+  {
+    title: 'Enduit sur isolant (ETICS)',
+    description: 'L\'isolant est fixé sur la façade, puis recouvert d\'un sous-enduit armé (treillis), et d\'un enduit de finition.',
+    ideal: 'Un rendu façade "traditionnel" propre, une rénovation esthétique avec un large choix de textures.',
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Bardage ventilé',
+    description: 'Une ossature et une lame d\'air ventilée sont mises en œuvre, puis le bardage (bois, composite, métal) est posé en parement.',
+    ideal: 'Un style contemporain, une façade très exposée, ou une solution ventilée et robuste.',
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l9 5-9 5-9-5 9-5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l9 5 9-5" />
+      </svg>
+    ),
+  },
+  {
+    title: 'Vêture / vêtage',
+    description: 'Panneaux de finition intégrés, posés en système complet, pour une façade à l\'aspect maîtrisé.',
+    ideal: 'Projets où la régularité et la rapidité de mise en œuvre sont prioritaires.',
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16v12H4z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 10h16" />
+      </svg>
+    ),
+  },
 ]
 
 const materials = [
@@ -271,13 +300,13 @@ export default function ITEPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {techniques.map((technique, index) => (
               <ScrollReveal key={technique.title} delay={index * 150}>
-                <div className="bg-white rounded-2xl overflow-hidden shadow-lg h-full">
-                  <div className="h-48 overflow-hidden"><Image src="/images/photos/mineral-wool-facade.jpeg" alt={technique.title} width={400} height={200} className="w-full h-full object-cover" /></div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gammart-green-dark mb-3">{technique.title}</h3>
-                    <p className="text-gray-600 mb-4">{technique.description}</p>
-                    <p className="text-sm text-gammart-green-leaf font-medium"><strong>Idéal pour :</strong> {technique.ideal}</p>
+                <div className="bg-white rounded-2xl p-6 shadow-lg h-full">
+                  <div className="w-12 h-12 bg-gammart-green-dark/10 rounded-xl flex items-center justify-center text-gammart-green-dark mb-4">
+                    {technique.icon}
                   </div>
+                  <h3 className="text-xl font-bold text-gammart-green-dark mb-3">{technique.title}</h3>
+                  <p className="text-gray-600 mb-4">{technique.description}</p>
+                  <p className="text-sm text-gammart-green-leaf font-medium"><strong>Idéal pour :</strong> {technique.ideal}</p>
                 </div>
               </ScrollReveal>
             ))}

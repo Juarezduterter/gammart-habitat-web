@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/ui/Container'
 
@@ -32,10 +33,15 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* À propos */}
             <div>
-              <h3 className="text-xl font-bold mb-4">
-                <span className="text-white">gammart</span>{' '}
-                <span className="text-gammart-green-sage">habitat</span>
-              </h3>
+              <div className="mb-4">
+                <Image
+                  src="/images/logos/logo-horizontal-colored-bg.png"
+                  alt="Gammart Habitat"
+                  width={200}
+                  height={60}
+                  className="h-12 w-auto"
+                />
+              </div>
               <p className="text-gammart-green-sage text-sm mb-4">
                 Le spécialiste de l'isolation thermique en Alsace. Solutions sur-mesure pour améliorer
                 le confort et réduire les dépenses énergétiques de votre logement.
@@ -119,8 +125,24 @@ export function Footer() {
           <div className="border-t border-gammart-green-sage/30 my-8"></div>
 
           {/* Bottom section */}
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-gammart-green-sage">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gammart-green-sage">
             <p>© {currentYear} Gammart Habitat. Tous droits réservés.</p>
+            <div className="flex items-center gap-3">
+              <span>Imaginé par l'agence</span>
+              <a
+                href="https://agence-webgenius.fr/"
+                className="inline-flex items-center gap-2 text-gammart-green-sage hover:text-white transition-colors"
+              >
+                <Image
+                  src="/images/partners/webgenius.svg"
+                  alt="Webgenius"
+                  width={110}
+                  height={28}
+                  className="h-6 w-auto brightness-0 invert"
+                />
+                <span className="sr-only">Webgenius</span>
+              </a>
+            </div>
             <div className="flex space-x-6">
               {legalLinks.map((link) => (
                 <Link key={link.href} href={link.href} className="hover:text-white transition-colors">

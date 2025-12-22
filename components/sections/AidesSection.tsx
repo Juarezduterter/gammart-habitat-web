@@ -90,6 +90,13 @@ export function AidesSection() {
                 className="h-12 w-auto brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
               />
               <Image
+                src="/images/certifications/ma-prime-renov-accompagnee.svg"
+                alt="MaPrimeRénov' - Mon parcours accompagné"
+                width={140}
+                height={50}
+                className="h-12 w-auto brightness-0 invert opacity-70 hover:opacity-100 transition-opacity"
+              />
+              <Image
                 src="/images/certifications/france-renov.svg"
                 alt="France Rénov'"
                 width={100}

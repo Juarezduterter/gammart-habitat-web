@@ -153,6 +153,17 @@ export default function AidesFinancementsPage() {
               <p className="text-lg text-gray-700 max-w-3xl mx-auto">
                 Répondez à quelques questions pour découvrir les aides auxquelles vous êtes éligible. Calcul basé sur le modèle officiel <strong>Mes Aides Réno</strong> du gouvernement.
               </p>
+              <a
+                href="https://mesaides.france-renov.gouv.fr/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 mt-6 text-gammart-green-dark font-semibold hover:underline"
+              >
+                Accéder au simulateur officiel Mes Aides Réno
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
             </div>
           </ScrollReveal>
 
